@@ -1,4 +1,4 @@
-// This one is custom, abstracting most JS / Dom lists
+// This one is custom / not official, abstracting most JS / Dom lists
 shared dynamic JSList<T>
 {
 	shared formal Integer length;
@@ -6,7 +6,7 @@ shared dynamic JSList<T>
 }
 
 /*
-Methods of Number / global object. Not sure how to declare them properly. Perhaps attached to document.
+Methods of [[Number]] / global object. Not sure how to declare them properly. Perhaps attached to document.
 dynamic shared Boolean isNaN();
 dynamic shared Boolean isFinite();
 dynamic shared Boolean isInteger();
@@ -38,7 +38,7 @@ shared dynamic JSNumber //satisfies Number<Float> | Number<Integer>
     shared formal String valueOf();
 }
 
-/** Create a new Number (INumber) from something likely to be a string or an number... */
+/** Create a new [[Number]] from something likely to be a string or an number... */
 JSNumber newNumber(Anything? v)
 {
     dynamic { return \iNumber(v); }
@@ -341,7 +341,7 @@ shared dynamic XMLHttpRequest
     shared formal void abort();
 
     "Returns the string containing the text of the specified header,
-     or null if either the response has not yet been received or the header doesn't exist in the response."
+     or `null` if either the response has not yet been received or the header doesn't exist in the response."
     shared formal String? getResponseHeader(String header);
 
     "Returns all the response headers as a string, or `null` if no response has been received."
@@ -386,7 +386,7 @@ shared dynamic XMLHttpRequest
     // Theoretically of type XMLHttpRequestResponseType but looks like strings...
     shared formal variable String responseType;
 
-    """The response to the request as a DOM `Document` object, or null if the request was unsuccessful,
+    """The response to the request as a DOM `Document` object, or `null` if the request was unsuccessful,
        has not yet been sent, or cannot be parsed as XML or HTML.
        The response is parsed as if it were a `text/xml` stream.
        When the `responseType` is set to `"document"` and the request has been made asynchronously, the response is parsed as a `text/html` stream.

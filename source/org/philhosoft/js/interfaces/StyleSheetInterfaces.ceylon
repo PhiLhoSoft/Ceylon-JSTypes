@@ -17,10 +17,10 @@ shared dynamic StyleSheet
 	"Location of the stylesheet."
 	shared formal String? href;
 
-	"Associates this style sheet with the current document."
+	"Returns a [[Node]] associating this style sheet with the current document."
 	shared formal Node? ownerNode;
 
-	"Returns a StyleSheet including this one, if any; returns null if there aren't any."
+	"Returns a [[StyleSheet]] including this one, if any; returns `null` if there aren't any."
 	shared formal StyleSheet? parentStyleSheet;
 
 	"Advisory title of the current style sheet."
@@ -37,7 +37,7 @@ shared dynamic StyleSheet
 shared dynamic CSSStyleSheet satisfies StyleSheet
 {
 	"If this style sheet is imported into the document using an `@import` rule, this property will return that [[CSSImportRule]],
-	 otherwise it returns null."
+	 otherwise it returns `null`."
 	shared formal CSSRule? ownerRule;
 
 	"The CSS rules in the style sheet."
@@ -85,7 +85,7 @@ shared dynamic CSSRule
 	"""Textual representation of the rule, e.g. `"h1,h2 { font-size: 16pt }"`"""
 	shared formal variable String cssText;
 
-	"Containing rule, otherwise null. Eg. if this rule is a style rule inside an `@media` block, the parent rule would be that [[CSSMediaRule]]."
+	"Containing rule, otherwise `null`. Eg. if this rule is a style rule inside an `@media` block, the parent rule would be that [[CSSMediaRule]]."
 	shared formal CSSRule? parentRule;
 
 	"The CSSStyleSheet object for the style sheet that contains this rule."

@@ -36,16 +36,16 @@ shared dynamic Node satisfies EventTarget
 	 [[NodeList]] being live means that if the children of the [[Node]] change, the NodeList object is automatically updated."
 	shared formal NodeList childNodes;
 
-	"First direct child node of the node, or null if the node has no child."
+	"First direct child node of the node, or `null` if the node has no child."
 	shared formal Node? firstChild;
 
-	"Last direct child node of the node, or null if the node has no child."
+	"Last direct child node of the node, or `null` if the node has no child."
 	shared formal Node? lastChild;
 
-	"Previous node in the tree, or null if there isn't such node."
+	"Previous node in the tree, or `null` if there isn't such node."
 	shared formal Node? previousSibling;
 
-	"Next node in the tree, or null if there isn't such node."
+	"Next node in the tree, or `null` if there isn't such node."
 	shared formal Node? nextSibling;
 
 
@@ -55,7 +55,7 @@ shared dynamic Node satisfies EventTarget
 	"Type of the node, like [[ELEMENT_NODE]] and similar."
 	shared formal Integer nodeType;
 
-	"Value of the node. null for most nodes, except nodes of type [[TEXT_NODE]] (Text objects), [[COMMENT_NODE]] (Comment objects),
+	"Value of the node. `null` for most nodes, except nodes of type [[TEXT_NODE]] (Text objects), [[COMMENT_NODE]] (Comment objects),
 	 and [[PROCESSING_INSTRUCTION_NODE]] (ProcessingInstruction objects), where the value corresponds to the text data contained in the object."
 	shared formal variable String? nodeValue;
 
@@ -63,13 +63,13 @@ shared dynamic Node satisfies EventTarget
 	shared formal variable String? textContent;
 
 
-	"The Document that this node belongs to. Null if no document is associated with it."
+	"The Document that this node belongs to. `null` if no document is associated with it."
 	shared formal Document? ownerDocument;
 
-	"Parent node of this node. Null if there is no such node, like if this node is the top of the tree or if it doesn't participate in a tree."
+	"Parent node of this node. `null` if there is no such node, like if this node is the top of the tree or if it doesn't participate in a tree."
 	shared formal Node? parentNode;
 
-	"Parent element of this node. Null if the node has no parent, or if that parent is not an [[Element]]."
+	"Parent element of this node. `null` if the node has no parent, or if that parent is not an [[Element]]."
 	shared formal Element? parentElement;
 
 
@@ -103,16 +103,16 @@ shared dynamic Node satisfies EventTarget
 	"Removes empty [[Text]] nodes and concatenates the data of remaining contiguous Text nodes into the first of their nodes. "
 	shared formal void normalize();
 
-	""
+	"`true` if the namespace is the default namespace on the given node or `false` if not."
 	shared formal Boolean isDefaultNamespace(String namespaceURI);
 
-	""
-	shared formal String lookupPrefix(String namespaceURI);
+	"Returns the prefix for a given namespace URI, if present, and `null` if not."
+	shared formal String? lookupPrefix(String namespaceURI);
 
-	""
-	shared formal String lookupNamespaceURI(String prefix);
+	"Returns the namespace URI associated with it on the given node if found (and `null` if not).
+	 Supplying `null` for the prefix will return the default namespace."
+	shared formal String? lookupNamespaceURI(String? prefix);
 }
-
 
 "NodeList can be live (eg. from [[Node.childNodes]]) or static (from document.querySelectorAll for example)"
 //shared dynamic NodeList satisfies Correspondence<Integer, Node> // Cannot use nodes[i], apparently
@@ -128,6 +128,15 @@ shared dynamic HTMLCollection satisfies JSList<Element>
 shared dynamic DOMImplementation
 {
 
+}
+
+shared dynamic Text
+{
+	"Returns the combined data of all direct [[Text]] node siblings."
+	shared formal String wholeText;
+
+	"Splits data at the given offset and returns the remainder as [[Text]] node."
+	shared formal Text splitText(Integer offset);
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Document
@@ -159,7 +168,7 @@ shared dynamic Document satisfies Node, GlobalEventHandlers
 	shared formal variable String? selectedStyleSheetSet;
 
 	"Name of the style sheet set that was last enabled.
-	 Has the value null until the style sheet is changed by setting the value of [[selectedStyleSheetSet]]."
+	 Has the value `null` until the style sheet is changed by setting the value of [[selectedStyleSheetSet]]."
 	shared formal String? lastStyleSheetSet;
 
 	"Preferred style sheet set as specified by the page author."
@@ -168,7 +177,8 @@ shared dynamic Document satisfies Node, GlobalEventHandlers
 	"Returns a list of the style sheet sets available on the document."
 	shared formal String[] styleSheetSets;
 
-	""
+	"Enables the style sheets matching the specified name in the current style sheet set,
+	 and disables all other style sheets (except those without a title, which are always enabled)."
 	shared formal void enableStyleSheetsForSet(String? name);
 }
 
@@ -309,14 +319,14 @@ shared dynamic HTMLElement satisfies Element, GlobalEventHandlers
 	"Language of an element's attributes, text, and element contents."
 	shared formal variable String lang;
 
-	"Reflects the dir global attribute, representing the directionality of the element.
-	 Possible values are \"ltr\", \"rtl\", and \"auto\"."
+	"""Reflects the dir global attribute, representing the directionality of the element.
+	   Possible values are "ltr", "rtl", and "auto"."""
 	shared formal variable String dir;
 
 	"Represents the declarations of an element's style attributes."
 	shared formal variable CSSStyleDeclaration style;
 
-	""
+	"?"
 	shared formal variable Boolean disabled;
 
 	"Indicates if the element is hidden or not."
@@ -325,7 +335,8 @@ shared dynamic HTMLElement satisfies Element, GlobalEventHandlers
 	"Controls spell-checking. It is present on all HTML elements, though it hasn't an effect on all of them."
 	shared formal variable Boolean spellcheck;
 
-	""
+	"Specify whether an element's attribute values and the values of its [[Text]] node children
+	 are to be translated when the page is localized, or whether to leave them unchanged."
 	shared formal variable Boolean translate;
 
 	"Indicates if the element can be dragged."
@@ -334,7 +345,7 @@ shared dynamic HTMLElement satisfies Element, GlobalEventHandlers
 	"Reflects the dropzone global attribute and describes the behavior of the element regarding a drop operation."
 	shared formal variable DOMSettableTokenList dropzone;
 
-	"'true' means the element is editable and 'false' means it isn't."
+	"`true` means the element is editable and `false` means it isn't."
 	shared formal variable String contentEditable;
 
 	"Indicates whether or not the content of the element can be edited."
@@ -349,13 +360,10 @@ shared dynamic HTMLElement satisfies Element, GlobalEventHandlers
 	"Element's assigned access key."
 	shared formal String accessKeyLabel;
 
-//	shared formal variable IHTMLMenuElement contextMenu;
-//	shared formal IDOMStringMap dataSet;
-
-	"Distance from this element's top border to its offsetParent's top border."
+	"Distance from this element's top border to its [[offsetParent]]'s top border."
 	shared formal Float offsetTop;
 
-	"Distance from this element's left border to its offsetParent's left border."
+	"Distance from this element's left border to its [[offsetParent]]'s left border."
 	shared formal Float offsetLeft;
 
 	"Width of an element, relative to the layout."
@@ -378,60 +386,6 @@ shared dynamic HTMLElement satisfies Element, GlobalEventHandlers
 
 	"Makes the spell checker runs on the element."
 	shared formal void forceSpellCheck();
-
-/*
-	ondragend: (ev: DragEvent) => any;
-	onkeydown: (ev: KeyboardEvent) => any;
-	ondragover: (ev: DragEvent) => any;
-	onkeyup: (ev: KeyboardEvent) => any;
-	onreset: (ev: Event) => any;
-	onmouseup: (ev: MouseEvent) => any;
-	ondragstart: (ev: DragEvent) => any;
-	ondrag: (ev: DragEvent) => any;
-	onmouseover: (ev: MouseEvent) => any;
-	ondragleave: (ev: DragEvent) => any;
-	onpause: (ev: Event) => any;
-	onseeked: (ev: Event) => any;
-	onmousedown: (ev: MouseEvent) => any;
-	onclick: (ev: MouseEvent) => any;
-	onwaiting: (ev: Event) => any;
-	ondurationchange: (ev: Event) => any;
-	onblur: (ev: FocusEvent) => any;
-	onemptied: (ev: Event) => any;
-	onseeking: (ev: Event) => any;
-	oncanplay: (ev: Event) => any;
-	onstalled: (ev: Event) => any;
-	onmousemove: (ev: MouseEvent) => any;
-	onratechange: (ev: Event) => any;
-	onloadstart: (ev: Event) => any;
-	ondragenter: (ev: DragEvent) => any;
-	onsubmit: (ev: Event) => any;
-	onprogress: (ev: any) => any;
-	ondblclick: (ev: MouseEvent) => any;
-	oncontextmenu: (ev: MouseEvent) => any;
-	onchange: (ev: Event) => any;
-	onloadedmetadata: (ev: Event) => any;
-	onerror: (ev: Event) => any;
-	onplay: (ev: Event) => any;
-	onplaying: (ev: Event) => any;
-	oncanplaythrough: (ev: Event) => any;
-	onabort: (ev: UIEvent) => any;
-	onreadystatechange: (ev: Event) => any;
-	onkeypress: (ev: KeyboardEvent) => any;
-	onloadeddata: (ev: Event) => any;
-	onsuspend: (ev: Event) => any;
-	onfocus: (ev: FocusEvent) => any;
-	ontimeupdate: (ev: Event) => any;
-	onselect: (ev: UIEvent) => any;
-	ondrop: (ev: DragEvent) => any;
-	onmouseout: (ev: MouseEvent) => any;
-	onended: (ev: Event) => any;
-	onscroll: (ev: UIEvent) => any;
-	onmousewheel: (ev: MouseWheelEvent) => any;
-	onvolumechange: (ev: Event) => any;
-	onload: (ev: Event) => any;
-	oninput: (ev: Event) => any;
-*/
 }
 
 shared dynamic HTMLBodyElement satisfies HTMLElement, WindowEventHandlers
